@@ -48,7 +48,6 @@
 - JUnit5 单元测试
 - 示例单元测试类
 
-## 快速上手
 
 ### MySQL 数据库
 
@@ -68,43 +67,6 @@ spring:
 3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
 
 ![](doc/swagger.png)
-
-### Redis 分布式登录
-
-1）修改 `application.yml` 的 Redis 配置为你自己的：
-
-```yml
-spring:
-  redis:
-    database: 1
-    host: localhost
-    port: 6379
-    timeout: 5000
-    password: 123456
-```
-
-2）修改 `application.yml` 中的 session 存储方式：
-
-```yml
-spring:
-  session:
-    store-type: redis
-```
-
-3）移除 `MainApplication` 类开头 `@SpringBootApplication` 注解内的 exclude 参数：
-
-修改前：
-
-```java
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
-```
-
-修改后：
-
-
-```java
-@SpringBootApplication
-```
 
 ### Elasticsearch 搜索引擎
 
@@ -137,3 +99,19 @@ PUT post_v1
 // todo 取消注释开启任务
 //@Component
 ```
+### mysql8.0+通过canal1.1.6监听数据库数据修改的问题
+- mysql8.0.3后身份检验方式为caching_sha2_password，但canal使用的是mysql_native_password，因此需要设置检验方式（如果该版本之前的可跳过），否则会报错IOException: caching_sha2_password Auth failed；
+````
+ALTER USER 'canal'@'%' IDENTIFIED WITH mysql_native_password BY 'canal';
+select host,user,plugin from mysql.user ;
+````
+- cancal1.1.6lib中MySQL驱动器为5.x版本；
+````
+将canal lib中的驱动器替换成mysql-connector-java-8+.jar；
+修改驱动器权限：
+chmod 777 lib/mysql-connector-java-8.0.22.jar
+chmod +st lib/mysql-connector-java-8.0.22.jar；
+删除原5.+版本驱动器，重启服务；
+````
+
+
