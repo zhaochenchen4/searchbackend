@@ -70,6 +70,8 @@ spring:
 
 ### Elasticsearch 搜索引擎
 
+https://www.elastic.co/cn/downloads/elasticsearch
+
 1）修改 `application.yml` 的 Elasticsearch 配置为你自己的：
 
 ```yml
@@ -95,17 +97,49 @@ PUT post_v1
 
 找到 job 目录下的 `FullSyncPostToEs` 和 `IncSyncPostToEs` 文件，取消掉 `@Component` 注解的注释，再次执行程序即可触发同步：
 
+
 ```java
 // todo 取消注释开启任务
 //@Component
 ```
-### mysql8.0+通过canal1.1.6监听数据库数据修改的问题
+4）ik分词
+
+https://github.com/medcl/elasticsearch-analysis-ik/tree/master/config
+
+https://github.com/medcl/elasticsearch-analysis-ik
+
+
+
+### Canal
+https://github.com/alibaba/canal/
+````
+数据库每次修改时会修改binary log文件，使用canal监听该文件的修改，可以及时获取数据并处理
+````
+![img.png](img.png)
+https://github.com/alibaba/canal/wiki/QuickStart
+
+Windows下找到本地MySQL安装目录，在根目录下创建my.ini文件：
+````
+[mysq1d]
+log- bin=mysql-bin #开启binlog
+binlog- format=ROW #选择ROW
+模式
+server_ id=1 #配置MySQL replaction 需要定义，不要和canal的slaveId 重复
+````
+Java找不到，修改startup.bat脚本为自己的JavaHome
+````
+set JAVA_ HOME= D:\environment\local\jdk1.8.0_152
+echo %JAVA_ HOME%
+set PATH=%JAVA_ HOME%\bin;%PATH%
+echo %PATH%
+````
+#### mysql8.0+通过canal1.1.6监听数据库数据修改的问题
 - mysql8.0.3后身份检验方式为caching_sha2_password，但canal使用的是mysql_native_password，因此需要设置检验方式（如果该版本之前的可跳过），否则会报错IOException: caching_sha2_password Auth failed；
 ````
 ALTER USER 'canal'@'%' IDENTIFIED WITH mysql_native_password BY 'canal';
 select host,user,plugin from mysql.user ;
 ````
-- cancal1.1.6lib中MySQL驱动器为5.x版本；
+- canal 1.1.6 lib中MySQL驱动器为5.x版本；
 ````
 将canal lib中的驱动器替换成mysql-connector-java-8+.jar；
 修改驱动器权限：
@@ -114,4 +148,7 @@ chmod +st lib/mysql-connector-java-8.0.22.jar；
 删除原5.+版本驱动器，重启服务；
 ````
 
+````java
+//todo 模拟第三方数据源接入
 
+````
