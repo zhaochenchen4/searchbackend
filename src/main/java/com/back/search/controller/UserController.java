@@ -1,12 +1,12 @@
 package com.back.search.controller;
 
+import com.back.search.config.WxOpenConfig;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.back.search.annotation.AuthCheck;
 import com.back.search.common.BaseResponse;
 import com.back.search.common.DeleteRequest;
 import com.back.search.common.ErrorCode;
 import com.back.search.common.ResultUtils;
-import com.back.search.config.WxOpenConfig;
 import com.back.search.constant.UserConstant;
 import com.back.search.exception.BusinessException;
 import com.back.search.exception.ThrowUtils;
