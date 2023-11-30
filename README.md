@@ -146,6 +146,30 @@ chmod +st lib/mysql-connector-java-8.0.22.jar；
 删除原5.+版本驱动器，重启服务；
 ````
 
+
+### 跨域处理
+#### 单个请求跨域处理
+```Java
+
+//可以在指定的Controller或方法添加注解@CrossOrigin
+//直接加上述注解会放行所有请求
+/*
+    @Deprecated
+    String[] DEFAULT_ORIGINS = new String[]{"*"};
+    @Deprecated
+    String[] DEFAULT_ALLOWED_HEADERS = new String[]{"*"};
+*/
+//在注解内添加指定参数    
+```
+#### 全局跨域处理
+```Java
+//封装跨域请求配置类
+//package --config
+//class --CorsConfig
+
+```
+https://juejin.cn/post/7201475476165328953
+
 ````java
 //todo 模拟第三方数据源接入
 
